@@ -37,7 +37,7 @@ public class AVPlayerView: UIView {
         }
     }
     
-    public func loadPlayerItem(_ playerItem: AVPlayerItem, onReady: ((Result<AVPlayer, Error>) -> Void)? = nil) {
+    public func loadPlayerItem(_ playerItem: AVPlayerItem, onReady: ((AVPlayer?, Error?) -> Void)? = nil) {
         let player = AVPlayer(playerItem: playerItem)
 
         self.player = player
@@ -51,9 +51,9 @@ public class AVPlayerView: UIView {
         playerItemStatusObserver = playerItem.observe(\.status) { [weak self] item, _ in
             switch item.status {
             case .failed:
-                completion(.failure(item.error!))
+                completion(nil, item.error!)
             case .readyToPlay:
-                completion(.success(player))
+                completion(player, nil)
                 // Stop observing
                 self?.playerItemStatusObserver = nil
             case .unknown:

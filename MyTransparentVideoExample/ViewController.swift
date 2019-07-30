@@ -41,12 +41,11 @@ class ViewController: UIViewController {
         let itemUrl: URL = Bundle.main.url(forResource: "playdoh-bat", withExtension: "mp4")!
         let playerItem = createTransparentItem(url: itemUrl)
         
-        playerView.loadPlayerItem(playerItem) { [weak self] result in
-            switch result {
-            case .failure(let error):
-                return print("Something went wrong when loading our video", error)
+        playerView.loadPlayerItem(playerItem) { [weak self] player, error in
+            if let error = error {
 
-            case .success(let player):
+                return print("Something went wrong when loading our video", error)
+            } else if let player = player {
                 // Finally, we can start playing
                 player.play()
                 // Animate background
